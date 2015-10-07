@@ -10,65 +10,61 @@ $(document).ready(function() {
     subtract: function(a, b) { return (a - b) },
     divide: function(a, b) { return (a / b) },
     multiply: function(a, b) { return (a * b) },
-    memory: []
-  }
+    addToMemory: function(buttonVal) {
+      calculator.memory.push(calculator.operand);
+      calculator.memory.push(buttonVal);
+      $('#screen')[0].innerText = buttonVal;
+      calculator.operand = '';
+    },
+    clearMemory: function() {
+      calculator.operand = '';
+      calculator.memory = [];
+      $('#screen')[0].innerText = '';
+    },
+    makeCalculation: function() {
+      // Improve so it can perform operations on more than two numbers
+      var numA = parseFloat(calculator.memory[0]),
+        operation = calculator.memory[1],
+        numB = parseFloat(calculator.memory[2])
 
-  var clearMemory = function() {
-    calculator.memory = [];
-    $('#screen')[0].innerText = '';
-  }
+      var resultRef ={
+        '+': calculator.add(numA, numB),
+        '-': calculator.subtract(numA, numB),
+        '/': calculator.divide(numA, numB),
+        '*': calculator.multiply(numA, numB)
+      }
 
-  var addToMemory = function(buttonVal) {
-    $('#screen')[0].innerText += buttonVal;
-    calculator.memory.push(buttonVal);
-  }
+      var result = resultRef[operation];
 
-  var makeCalculation = function() {
-    // Improve so it can perform operations on more than two numbers
-    var numA = parseInt(calculator.memory[0]),
-      operation = calculator.memory[1],
-      numB = parseInt(calculator.memory[2]),
-      result
-
-    switch(operation) {
-      case '+':
-        result = calculator.add(numA, numB);
-        break;
-      case '-':
-        result = calculator.subtract(numA, numB);
-        break;
-      case '/':
-        result = calculator.divide(numA, numB);
-        break;
-      case '*':
-        result = calculator.multiply(numA, numB);
-        break;
-    }
-
-    $('#screen')[0].innerText = result;
-    calculator.memory.push('=');
+      $('#screen')[0].innerText = Math.round(result * 100) / 100;
+      calculator.memory.push('=');
+    },
+    memory: [],
+    operand: ''
   }
 
   $('.btn').on('click', function() {
     var buttonVal = this.innerHTML;
 
+    // Clear memory if a calculation has just been made
     if (calculator.memory[calculator.memory.length -1] === '=') {
-      clearMemory();
+      calculator.clearMemory();
     }
 
-    switch(buttonVal) {
-      case 'CLEAR':
-        return clearMemory();
-        break;
-      case '=':
-        return makeCalculation();
-        break;
-      case '.':
-        // account for decimal points
-        break;
-      default:
-        addToMemory(buttonVal);
-        break;
+    if (buttonVal.match(/[+\-\/\*]/)) {
+      return calculator.addToMemory(buttonVal);
     }
+
+    if (buttonVal === '=') {
+      calculator.memory.push(calculator.operand);
+      return calculator.makeCalculation();
+    }
+
+    if (buttonVal === 'CLEAR') {
+      return calculator.clearMemory();
+    }
+
+    calculator.operand += buttonVal;
+    $('#screen')[0].innerText = calculator.operand;
   });
 });
