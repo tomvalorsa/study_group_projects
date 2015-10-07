@@ -8,6 +8,14 @@
   border: 1px solid black;
 }
 
+#screen {
+  height: 50px;
+  width: 100%;
+  border: 1px solid red;
+  color: blue;
+  font-size: 14px;
+}
+
 .row {
   height: 50px;
   font-size: 0;
