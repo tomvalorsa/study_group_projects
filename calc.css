@@ -1,0 +1,33 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+#calculator {
+  width: 200px;
+  border: 1px solid black;
+}
+
+.row {
+  height: 50px;
+  font-size: 0;
+}
+
+.btn {
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  position: relative;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.rect {
+  width: 100%;
+}
+
+.square {
+  display: inline-block;
+  width: 50px;
+}
