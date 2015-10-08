@@ -30,7 +30,7 @@ $(document).ready(function() {
           case '-':
             result -= num;
             break;
-          case '/':
+          case '÷':
             result /= num;
             break;
           case 'x':
@@ -52,7 +52,7 @@ $(document).ready(function() {
       calculator.clearMemory();
     }
 
-    if (buttonVal.match(/[+\-\/x]/)) {
+    if (buttonVal.match(/[+\-x÷]/)) {
       return calculator.addToMemory(buttonVal);
     }
 
