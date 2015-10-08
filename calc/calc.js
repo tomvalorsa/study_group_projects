@@ -1,57 +1,58 @@
 $(document).ready(function() {
-  $('.square').each(function(i, square) {
-    // fix this to alternate colour on rows
-    var bgColor = i % 2 === 0 ? '#ABA4AD' : '#8E878F';
-    $(square).css({'background-color': bgColor});
-  });
-
   var calculator = {
-    add: function(a, b) { return (a + b) },
-    subtract: function(a, b) { return (a - b) },
-    divide: function(a, b) { return (a / b) },
-    multiply: function(a, b) { return (a * b) },
+    memory: [],
+    operand: '',
     addToMemory: function(buttonVal) {
-      calculator.memory.push(calculator.operand);
-      calculator.memory.push(buttonVal);
+      this.memory.push(this.operand);
+      this.memory.push(buttonVal);
       $('#screen')[0].innerText = buttonVal;
-      calculator.operand = '';
+      this.operand = '';
     },
     clearMemory: function() {
-      calculator.operand = '';
-      calculator.memory = [];
+      this.operand = '';
+      this.memory = [];
       $('#screen')[0].innerText = '';
     },
     makeCalculation: function() {
-      // Improve so it can perform operations on more than two numbers
-      var numA = parseFloat(calculator.memory[0]),
-        operation = calculator.memory[1],
-        numB = parseFloat(calculator.memory[2])
+      var result = Number(this.memory.shift()),
+        pairs = [];
 
-      var resultRef ={
-        '+': calculator.add(numA, numB),
-        '-': calculator.subtract(numA, numB),
-        '/': calculator.divide(numA, numB),
-        '*': calculator.multiply(numA, numB)
-      }
+      while (this.memory.length > 0) { pairs.push(this.memory.splice(0, 2)); }
 
-      var result = resultRef[operation];
+      pairs.forEach(function(pair) {
+        var operation = pair[0],
+          num = Number(pair[1]);
+
+        switch(operation) {
+          case '+':
+            result += num;
+            break;
+          case '-':
+            result -= num;
+            break;
+          case '/':
+            result /= num;
+            break;
+          case 'x':
+            result *= num;
+            break;
+        }
+      });
 
       $('#screen')[0].innerText = Math.round(result * 100) / 100;
       calculator.memory.push('=');
-    },
-    memory: [],
-    operand: ''
+    }
   }
 
   $('.btn').on('click', function() {
-    var buttonVal = this.innerHTML;
+    var buttonVal = $(this).children()[0].innerHTML;
 
     // Clear memory if a calculation has just been made
     if (calculator.memory[calculator.memory.length -1] === '=') {
       calculator.clearMemory();
     }
 
-    if (buttonVal.match(/[+\-\/\*]/)) {
+    if (buttonVal.match(/[+\-\/x]/)) {
       return calculator.addToMemory(buttonVal);
     }
 
@@ -60,11 +61,11 @@ $(document).ready(function() {
       return calculator.makeCalculation();
     }
 
-    if (buttonVal === 'CLEAR') {
-      return calculator.clearMemory();
-    }
-
     calculator.operand += buttonVal;
     $('#screen')[0].innerText = calculator.operand;
+  });
+
+  $('#clear').on('click', function() {
+    return calculator.clearMemory();
   });
 });
