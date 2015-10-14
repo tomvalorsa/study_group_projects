@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './index.css'
+import classnames from 'classnames'
 
 export class GameBoard extends React.Component {
   state = {
@@ -9,13 +10,13 @@ export class GameBoard extends React.Component {
   componentDidMount(){
     let dimensions = this.props.dimensions
     let grid = []
-    let columns = []
 
-    for (let i = 0; i < dimensions[1]; i++) {
-      columns.push([''])
-    }
-    for (let i = 0; i < dimensions[1]; i++) {
-      grid.push(columns)
+    for (let x = 0; x < dimensions[1]; x++) {
+      let column = []
+      for (let y = 0; y < dimensions[0]; y++) {
+        column.push('')
+      }
+      grid.push(column)
     }
 
     this.setState({grid})
@@ -29,14 +30,17 @@ export class GameBoard extends React.Component {
     let rows = []
     let grid = this.state.grid
 
-    for (let i = 0; i < grid.length; i ++) {
-      let columns = []
-      for (let j = 0; j < grid[i].length; j++) {
-        columns.push(<div className={styles.gridSquare}></div>)
+    for (let x = 0; x < grid.length; x ++) {
+      let squares = []
+      for (let y = 0; y < grid[x].length; y++) {
+        let key =`${x}-${y}`
+        let snakeClass = (x === 10 && y === 10) ? styles.snake : null
+
+        squares.push(<div key={key} className={classnames(snakeClass, styles.gridSquare)}></div>)
       }
       rows.push(
-        <div className={styles.row}>
-          {columns}
+        <div key={x} className={styles.row}>
+          {squares}
         </div>
       )
     }

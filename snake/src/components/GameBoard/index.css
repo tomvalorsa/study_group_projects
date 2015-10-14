@@ -9,8 +9,13 @@
   width: 20px;
   border: 1px solid black;
   display: inline-block;
+  box-sizing: border-box;
 }
 
 .row {
   height: 20px;
+}
+
+.snake {
+  background-color: blue;
 }
