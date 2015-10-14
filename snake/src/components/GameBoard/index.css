@@ -1,0 +1,16 @@
+.container {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.gridSquare {
+  height: 20px;
+  width: 20px;
+  border: 1px solid black;
+  display: inline-block;
+}
+
+.row {
+  height: 20px;
+}
